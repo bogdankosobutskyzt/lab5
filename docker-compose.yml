@@ -1,0 +1,29 @@
+version: "3"
+services:
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile.prod
+    container_name: realworld-docker-frontend
+    command: serve -s build -l 3000
+    restart: unless-stopped
+    environment:
+      - WDS_SOCKET_PORT=0
+
+  api:
+    build:
+      context: api
+      dockerfile: Dockerfile.prod
+    command: npm run prod
+    environment:
+      - PORT=3001
+      - HOST=localhost
+      - MONGO_URL=mongodb://api_db:27017/
+    depends_on:
+      - api_db
+  api_db:
+    image: mongo:latest
+    volumes:
+      - mongodb_api:/data/db
+volumes:
+  mongodb_api:

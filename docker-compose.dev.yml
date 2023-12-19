@@ -1,0 +1,19 @@
+version: "3"
+services:
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile.dev
+    command: npm run start
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./frontend:/usr/src/app
+  api:
+    build:
+      context: api
+      dockerfile: Dockerfile.dev
+    command: npm run dev
+    volumes:
+      - ./api:/usr/src/app
+      - /usr/src/app/node_modules
